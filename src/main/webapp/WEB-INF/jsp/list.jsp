@@ -14,26 +14,25 @@
 			<table class="table table-striped">
 				<thead>
 					<tr>
-						<th width="40%">Nome</th>
+						<th width="20%">Nome</th>
 						<th width="20%">Valor</th>
-						<th width="40%">Descri&#231&#227o</th>
+						<th width="20%">Descri&#231&#227o</th>
 						<th width="20%">Desconto</th>
-						<th width="40%">Valor ap&#243s desconto</th>
-						<th width="20%"></th>
+						<th width="20%">Valor ap&#243s desconto</th>
 					</tr>
 				</thead>
 				<tbody>
 					<c:forEach items="${produtos}" var="produto">
 						<tr>
 							<td>${produto.nome}</td>
-							<td>${produto.valor}</td>
+							<td>R$${produto.valor}</td>
 							<td>${produto.descricao}</td>
-							<td>${produto.desconto}</td>
-							<td>${produto.valorAposDesconto}</td>
+							<td>${produto.desconto}%</td>
+							<td>R$${produto.valorAposDesconto}</td>
 							<td><a type="button" class="btn btn-success"
-								href="/update?nome=${produto.nome}">Update</a>
+								href="/update?id=${produto.id}">Update</a>
 							<a type="button" class="btn btn-warning"
-								href="/delete?nome=${produto.nome}">Delete</a></td>
+								href="/delete?id=${produto.id}">Delete</a></td>
 						</tr>
 					</c:forEach>
 				</tbody>

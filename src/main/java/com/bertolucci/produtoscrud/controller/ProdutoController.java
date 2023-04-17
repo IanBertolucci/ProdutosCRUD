@@ -9,8 +9,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Optional;
 
 @Controller
 public class ProdutoController {
@@ -44,25 +45,26 @@ public class ProdutoController {
 		return PRODUTO;
 	}
 
-	@PutMapping("/update")
-	public String updateProduto(Produto produto, BindingResult result) {
+	@PostMapping("/update")
+	public String updateProduto(ProdutoDTO produtoDTO, BindingResult result) {
 		if (result.hasErrors()) {
 			return PRODUTO;
 		}
 
-		produtoService.updateProduto(produto);
+		produtoService.updateProduto(produtoDTO);
 		return REDIRECT;
 	}
 
 	@GetMapping("/update")
-	public String updateProdutoPage(@RequestParam String nome, ModelMap model) {
-		model.put(PRODUTO, produtoService.getProdutoByNome(nome));
+	public String updateProdutoPage(@RequestParam long id, ModelMap model) {
+		Optional<Produto> produto = produtoService.getProdutoById(id);
+		produto.ifPresent(value -> model.put(PRODUTO, value));
 		return PRODUTO;
 	}
 
 	@GetMapping("/delete")
-	public String deleteTodo(@RequestParam String nome) {
-		produtoService.deleteProduto(nome);
+	public String deleteTodo(@RequestParam long id) {
+		produtoService.deleteProduto(id);
 		return REDIRECT;
 	}
 }
