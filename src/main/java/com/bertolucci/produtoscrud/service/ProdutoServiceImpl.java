@@ -1,14 +1,15 @@
 package com.bertolucci.produtoscrud.service;
 
-import java.util.List;
-import java.util.Optional;
-
 import com.bertolucci.produtoscrud.dto.ProdutoDTO;
 import com.bertolucci.produtoscrud.model.Produto;
+import com.bertolucci.produtoscrud.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bertolucci.produtoscrud.repository.ProdutoRepository;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProdutoServiceImpl implements ProdutoService {
@@ -22,8 +23,8 @@ public class ProdutoServiceImpl implements ProdutoService {
 	}
 
 	@Override
-	public Produto getProdutoByNome(String nome) {
-		return produtoRepository.findByNome(nome).orElse(null);
+	public Optional<Produto> getProdutoById(long id) {
+		return produtoRepository.findById(id);
 	}
 
 	@Override
@@ -42,19 +43,28 @@ public class ProdutoServiceImpl implements ProdutoService {
 		return persistanceProduto;
 	}
 
+	@Override
+	public void updateProduto(ProdutoDTO produtoDTO) {
+		Optional<Produto> produtoPersistance = produtoRepository.findById(produtoDTO.getId());
+		if (produtoPersistance.isPresent()){
+			Produto produto = produtoPersistance.get();
+			produto.setNome(produtoDTO.getNome());
+			produto.setDescricao(produtoDTO.getDescricao());
+			produto.setValor(produtoDTO.getValor());
+			produto.setDesconto(produtoDTO.getDesconto());
+			produto.setValorAposDesconto(calcularValorAposDesconto(produtoDTO.getDesconto(), produtoDTO.getValor()));
+			produtoRepository.save(produto);
+		}
+	}
+
 	private Double calcularValorAposDesconto(Integer desconto, Double valor) {
 		Double valorDescontado = valor * (desconto.doubleValue()/100);
-		return valor - valorDescontado;
+		return BigDecimal.valueOf(valor - valorDescontado).setScale(2, RoundingMode.CEILING).doubleValue();
 	}
 
 	@Override
-	public void updateProduto(Produto produto) {
-		produtoRepository.save(produto);
-	}
-
-	@Override
-	public void deleteProduto(String nome) {
-		Optional<Produto> produto = produtoRepository.findByNome(nome);
+	public void deleteProduto(long id) {
+		Optional<Produto> produto = produtoRepository.findById(id);
 		produto.ifPresent(this::delete);
 	}
 

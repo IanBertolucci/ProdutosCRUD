@@ -1,6 +1,7 @@
 package com.bertolucci.produtoscrud.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.bertolucci.produtoscrud.dto.ProdutoDTO;
 import com.bertolucci.produtoscrud.model.Produto;
@@ -9,11 +10,11 @@ public interface ProdutoService {
 
 	List<Produto> getProdutos();
 
-	Produto getProdutoByNome(String nome);
+	Optional<Produto> getProdutoById(long id);
 
-	void updateProduto(Produto produto);
+	void updateProduto(ProdutoDTO produtoDTO);
 
-	void deleteProduto(String nome);
+	void deleteProduto(long id);
 	
 	void saveProduto(Produto produto);
 

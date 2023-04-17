@@ -17,7 +17,7 @@
 
 						<fieldset class="form-group">
 							<form:label path="valor">Valor</form:label>
-							<form:input path="valor" type="text" class="form-control"
+							<form:input path="valor" type="number" step=".01" min="0.01" class="form-control"
 										required="required" />
 							<form:errors path="valor" cssClass="text-warning" />
 						</fieldset>
@@ -31,7 +31,7 @@
 
 						<fieldset class="form-group">
 							<form:label path="desconto">Desconto (%)</form:label>
-							<form:input path="desconto" type="text" inputmode="numeric" class="form-control"
+							<form:input path="desconto" type="number" max="100" min="1" class="form-control"
 										required="required" />
 							<form:errors path="desconto" cssClass="text-warning" />
 						</fieldset>
